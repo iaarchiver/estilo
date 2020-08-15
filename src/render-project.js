@@ -73,6 +73,17 @@ function renderColorschemes (project) {
   colorschemes.forEach(c => {
     const palette = palettes[c.palette]
     const term = project.term ? compileterm(project.term, palette) : {}
+    // fix cterm from
+    if (term){
+      const invertedTerm = objectFlip(term)
+      Object.keys(palette).forEach(k => {
+        const props = palette[k]
+        if (props[0] in invertedTerm){
+            props[1] = parseInt(invertedTerm[props[0]])
+            palette[k] = props
+        }
+      })
+    }
     const data = {
       c: compileColorscheme(project.syntax, palette),
       date: now,
@@ -88,6 +99,13 @@ function renderColorschemes (project) {
     fs.writeFileSync(path.resolve(project.path, 'colors', fileName), rendered)
     log('colorscheme:', chalk.cyan(fileName), '...', chalk.green.bold('OK'))
   })
+}
+
+function objectFlip(obj) {
+  return Object.keys(obj).reduce((ret, key) => {
+    ret[obj[key]] = key;
+    return ret;
+  }, {});
 }
 
 function renderStatusBars (project, statusName) {
