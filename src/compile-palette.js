@@ -1,7 +1,7 @@
 'use strict'
 
 const isHexColor = require('./is-hex-color.js')
-const hexterm = require('hexterm')
+const hexterm = require('hexterm').hexterm
 
 module.exports = function (colors, paletteName) {
   const palette = {}
@@ -21,4 +21,3 @@ module.exports = function (colors, paletteName) {
   })
   return palette
 }
-
